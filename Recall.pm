@@ -7,7 +7,7 @@
 # redistribute it and/or modify it under the same terms as Perl
 # itself.
 #
-# $Id: Recall.pm,v 1.8 2000/11/18 08:43:56 cvs Exp $
+# $Id: Recall.pm,v 1.10 2001/05/27 10:52:16 cvs Exp $
 
 use 5.005;
 use DBI;
@@ -20,7 +20,7 @@ package DBD::Recall;
 use strict;
 use vars qw($err $errstr $sqlstate $drh $VERSION $AUTOLOAD);
 
-( $VERSION ) = '$Revision: 1.8 $' =~ /\s+([\d\.]+)/;
+( $VERSION ) = '$Revision: 1.10 $' =~ /\s+([\d\.]+)/;
 
 $err = 0;		# holds error code   for DBI::err
 $errstr = "";		# holds error string for DBI::errstr
@@ -63,7 +63,9 @@ sub _delegate {
     Replication::Recall::Client::Clerk_read($clerk, 'LockWrite', $str, $ex);
     $x = Replication::Recall::Client::String_c_str($str)
   } while ($x ne 'Locked');
+  my $d = $Data::Dumper::Terse; $Data::Dumper::Terse = 0;
   $x = $xs?Data::Dumper::DumperX(\%cmd):Data::Dumper::Dumper(\%cmd);
+  $Data::Dumper::Terse = $d;
   my $result = Replication::Recall::Client::Clerk_write($clerk, $x, $str, $ex);
   my $VAR1 = undef; eval Replication::Recall::Client::String_c_str($str);
   return undef unless $VAR1; my %ret = %$VAR1; 
@@ -224,11 +226,17 @@ sub AUTOLOAD {
   DBD::Recall::_delegate($self->{driver_stid}, 'AutoST', $auto, @_);
 }
 
-=pod
+"True Value";
+__END__
 
 =head1 NAME 
 
 DBD::Recall - Database fault tolerance through replication.
+
+=head1 VERSION
+
+ $Revision: 1.10 $
+ $Date: 2001/05/27 10:52:16 $
 
 =head1 SYNOPSIS
 
@@ -319,6 +327,3 @@ under the same terms as Perl itself.
 This is free software. If it breaks, you own both parts.
 
 =cut
-
-'True Value';
-

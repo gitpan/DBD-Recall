@@ -1,0 +1,110 @@
+
+     * NAME
+     * VERSION
+     * SYNOPSIS
+     * DESCRIPTION
+     * WARNING
+     * BUGS
+     * AUTHOR
+     * ACKNOWLEDGEMENTS
+     * LICENSE
+     * DISCLAIMER
+     _________________________________________________________________
+
+                                     NAME
+
+   DBD::Recall - Database fault tolerance through replication.
+     _________________________________________________________________
+
+                                    VERSION
+
+ $Revision: 1.10 $
+ $Date: 2001/05/27 10:52:16 $
+     _________________________________________________________________
+
+                                   SYNOPSIS
+
+  use DBI;
+
+  my $replicas = '192.168.1.1:7000,192.168.1.2:7000,192.168.1.3:7000';
+  my $dsn = "DBI:Recall:database=$replicas";
+
+  my $drh = DBI->install_driver ($driver, { Replicas => $replicas });
+  my @dbs = $drh->func( "_ListDBs" );
+  print (join "\n",@dbs,"\n");
+
+  my $dbh = DBI->connect($dsn);
+  my @tables = $dbh->tables();
+  print (join "\n",@tables,"\n");
+     _________________________________________________________________
+
+                                  DESCRIPTION
+
+   This module interfaces to Recall, a data replication library written
+   by Eric Newton, to provide transparent fault tolerance for database
+   applications.
+
+   Recall is based on a data replication algorithm developed at DEC's SRC
+   for the Echo filesystem. It implements a fast protocol with low
+   network overhead and guranteed fault tolerance as long as n of 2n-1
+   replica nodes are up.
+
+   The DBD::Recall interface allows you to add fault tolerance to your
+   database applications by a trivial change in your code. Simply use
+   this module instead of the DBD you are currently using.
+
+   To achieve replicated functionality you'll also need to set up a few
+   pieces of external infrastucture, such as the replica servers, and
+   rsync access between replicas. This is all described in greater detail
+   in the Replication::Recall::DBServer manpage.
+     _________________________________________________________________
+
+                                    WARNING
+
+   DBD::Recall is a hack that attempts to accomplish something
+   (fault-tolerance through replication) at the perl DBD driver level
+   that would be better implemented by database servers. It works, but it
+   is not pretty.
+
+   Some commercial servers, such as Oracle, do implement replication. If
+   speed and reliability are critical to your application, you will
+   probably be better off with one of the commercial databases that
+   implement replication within the database engine.
+
+   I've only tried DBD::Recall with MySQL so far on Debian GNU/Linux. If
+   you get it to work with another database engine or on another
+   operating system, please email me about your experiences so I can
+   include information about your platform in future releases.
+     _________________________________________________________________
+
+                                     BUGS
+
+     * Transparency is accomplished through a remote delegation hack
+       which might break under certain circumstances. If this happens to
+       you, please let me know.
+
+     * There must be loads more. Let me know if you find some.
+     _________________________________________________________________
+
+                                    AUTHOR
+
+   DBD::Recall is Copyright (c) 2000 Ashish Gulhati
+   <hash@netropolis.org>. All Rights Reserved.
+     _________________________________________________________________
+
+                               ACKNOWLEDGEMENTS
+
+   Thanks to Barkha for inspiration, laughs and all 'round good times;
+   and to Eric Newton, Gurusamy Sarathy, Larry Wall, Richard Stallman and
+   Linus Torvalds for all the great software.
+     _________________________________________________________________
+
+                                    LICENSE
+
+   This code is free software; you can redistribute it and/or modify it
+   under the same terms as Perl itself.
+     _________________________________________________________________
+
+                                  DISCLAIMER
+
+   This is free software. If it breaks, you own both parts.
