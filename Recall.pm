@@ -7,7 +7,7 @@
 # redistribute it and/or modify it under the same terms as Perl
 # itself.
 #
-# $Id: Recall.pm,v 1.7 2000/11/14 21:26:13 cvs Exp $
+# $Id: Recall.pm,v 1.8 2000/11/18 08:43:56 cvs Exp $
 
 use 5.005;
 use DBI;
@@ -20,7 +20,7 @@ package DBD::Recall;
 use strict;
 use vars qw($err $errstr $sqlstate $drh $VERSION $AUTOLOAD);
 
-( $VERSION ) = '$Revision: 1.7 $' =~ /\s+([\d\.]+)/;
+( $VERSION ) = '$Revision: 1.8 $' =~ /\s+([\d\.]+)/;
 
 $err = 0;		# holds error code   for DBI::err
 $errstr = "";		# holds error string for DBI::errstr
@@ -253,7 +253,7 @@ applications.
 
 Recall is based on a data replication algorithm developed at DEC's SRC
 for the Echo filesystem. It implements a fast protocol with low
-network overhead and guranteed fault tolerance as long as n of 2n+1
+network overhead and guranteed fault tolerance as long as n of 2n-1
 replica nodes are up.
 
 The DBD::Recall interface allows you to add fault tolerance to your
